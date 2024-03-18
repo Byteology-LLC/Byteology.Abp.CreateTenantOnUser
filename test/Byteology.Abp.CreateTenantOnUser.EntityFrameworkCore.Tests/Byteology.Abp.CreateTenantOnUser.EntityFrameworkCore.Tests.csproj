@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>Byteology.Abp.CreateTenantOnUser</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Byteology.Abp.CreateTenantOnUser.EntityFrameworkCore\Byteology.Abp.CreateTenantOnUser.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Byteology.Abp.CreateTenantOnUser.Application.Tests\Byteology.Abp.CreateTenantOnUser.Application.Tests.csproj" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="8.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+  </ItemGroup>
+
+</Project>
