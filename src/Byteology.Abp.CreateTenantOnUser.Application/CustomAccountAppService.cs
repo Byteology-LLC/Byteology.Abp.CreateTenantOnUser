@@ -58,7 +58,7 @@ namespace Byteology.Abp.CreateTenantOnUser
             var tenant = await SeedNewTenantAsync(input);
 
             //if the seed is done correctly, we should now be able to pull the IdentityUser values from the user database and pass them back to the registration system
-            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(await UserManager.FindByEmailAsync(input.EmailAddress) ?? throw new InvalidOperationException());
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(await GetUserByEmailAddress(input.EmailAddress) ?? throw new InvalidOperationException());
 
         }
 
@@ -110,13 +110,19 @@ namespace Byteology.Abp.CreateTenantOnUser
 
         private async Task ValidateUniqueEmailAsync(string emailAddress)
         {
+            var user = await GetUserByEmailAddress(emailAddress);
+            if (user != null)
+            {
+                throw new UserFriendlyException("Email address is already taken.");
+            }
+        }
+
+        private async Task<IdentityUser?> GetUserByEmailAddress(string emailAddress)
+        {
             //disable the IMultiTenant filter to allow for checking email address across all tenants
             using (_dataFilter.Disable<IMultiTenant>())
             {
-                var user = await UserManager.FindByEmailAsync(emailAddress);
-                if (user != null) {
-                    throw new UserFriendlyException("Email address is already taken.");
-                }
+                return await UserManager.FindByEmailAsync(emailAddress);
             }
         }
 
